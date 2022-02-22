@@ -16,7 +16,7 @@
                 <a href="#" class="close" data-dismiss="alert" ng-click="closeMsg()" aria-label="close">&times;</a>
                 {{successMessage}}
             </div>
-            <form name="testform" ng-submit="insertData()">
+            <form name="testform" ng-submit="insertData()" autocomplete="off">
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
@@ -36,11 +36,20 @@
                         </tr>
 
                     </tbody>
+
+                    <?php
+                    $conn = new mysqli('localhost', 'root', '', 'testing');
+                    $sql = "select sum(inr_total) from testing";
+                    $q = mysqli_query($conn, $sql);
+                    $row = mysqli_fetch_array($q);
+
+
+                    ?>
                     <tr>
                         <td colspan="2">
                             Total Balance
                         </td>
-                        <td>100</td>
+                        <td>{{row}}</td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -60,9 +69,9 @@
                     </td>
                 </script>
             <script type="text/ng-template" id="edit">
-                <td><input type="text" id="usd_rate_edit" ng-model="formData.usd_rate" class="form-control" value="" /></td>
-                    <td><input type="text" id="usd_total_edit" ng-model="formData.usd_total" class="form-control" value=""/></td>
-                    <td><input type="text" id="inr_total_edit" ng-model="formData.inr_total" class="form-control" disabled /></td>
+                <td><input type="text" ng-model="formData.usd_rate" class="form-control usd_rate_edit" value="" /></td>
+                    <td><input type="text" ng-model="formData.usd_total" class="form-control usd_total_edit" value=""/></td>
+                    <td><input type="text" ng-model="formData.inr_total" class="form-control inr_total_edit" disabled /></td>
                     <td>
                         <input type="hidden" ng-model="formData.data.id" />
                         <button type="button" class="btn btn-info btn-sm" ng-click="editData()">Save</button>
@@ -159,10 +168,10 @@
 
         $('#inr_total').val(usd_rate * usd_total);
     });
-    $('#usd_rate_edit, #usd_total_edit').on('input', function() {
-        var usd_rate_edit = parseFloat($('#usd_rate_edit').val1()) || 0;
-        var usd_total_edit = parseFloat($('#usd_total_edit').val1()) || 0;
+    $('.usd_rate_edit, .usd_total_edit').on('input', function() {
+        var usd_rate_edit = parseFloat($('.usd_rate_edit').val1()) || 0;
+        var usd_total_edit = parseFloat($('.usd_total_edit').val1()) || 0;
 
-        $('#inr_total_edit').val1(usd_rate_edit * usd_total_edit);
+        $('.inr_total_edit').val1(usd_rate_edit * usd_total_edit);
     });
 </script>
